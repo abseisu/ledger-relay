@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ledger Relay — Download</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            background: #FAF8F5;
+            color: #2C2C2C;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+        }
+        .container { max-width: 500px; width: 100%; text-align: center; }
+        .icon {
+            width: 72px; height: 72px; border-radius: 16px;
+            background: linear-gradient(135deg, #34C759, #2EA84E);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 28px;
+            box-shadow: 0 6px 20px rgba(52,199,89,0.25);
+        }
+        .icon svg { width: 36px; height: 36px; fill: white; }
+        h1 { font-size: 32px; font-weight: 500; margin-bottom: 6px; }
+        .sub { font-size: 17px; font-style: italic; color: #999; margin-bottom: 32px; }
+        .desc { font-size: 16px; line-height: 1.7; color: #666; margin-bottom: 32px; text-align: left; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #2C2C2C; color: #FAF8F5;
+            font-family: inherit; font-size: 17px; font-weight: 500;
+            padding: 14px 36px; border-radius: 10px; border: none;
+            cursor: pointer; text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn:hover { background: #1a1a1a; }
+        .btn svg { width: 18px; height: 18px; fill: #FAF8F5; }
+        .steps { text-align: left; margin-top: 40px; padding-top: 32px; border-top: 1px solid #E5E0DA; }
+        .steps h2 { font-size: 19px; font-weight: 500; margin-bottom: 16px; }
+        .step { display: flex; gap: 14px; margin-bottom: 16px; }
+        .num {
+            width: 26px; height: 26px; border-radius: 50%;
+            background: rgba(44,44,44,0.08); display: flex;
+            align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 600; flex-shrink: 0;
+        }
+        .step p { font-size: 15px; line-height: 1.6; color: #555; }
+        .step strong { color: #2C2C2C; }
+        .note {
+            margin-top: 32px; padding: 16px 20px; background: #F0EDE8;
+            border-radius: 10px; font-size: 13px; font-style: italic;
+            color: #999; line-height: 1.6; text-align: left;
+        }
+        .foot { margin-top: 36px; font-size: 12px; color: #ccc; font-style: italic; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="icon">
+        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.2L4 17.2V4h16v12z"/></svg>
+    </div>
+    <h1>Ledger Relay</h1>
+    <p class="sub">iMessage companion for Ledger</p>
+    <p class="desc">A tiny menu bar app that connects your iMessages to Ledger on your iPhone. It reads incoming messages, scores them, and lets you reply — all from the Ledger app.</p>
+
+    <a href="https://github.com/adnanbseisu/ledger-relay/releases/latest/download/LedgerRelay.zip" class="btn">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        Download for Mac
+    </a>
+
+    <div class="steps">
+        <h2>Setup</h2>
+        <div class="step"><div class="num">1</div><p>Unzip and drag <strong>Ledger Relay</strong> to your Applications folder.</p></div>
+        <div class="step"><div class="num">2</div><p>Open it. If macOS blocks it, go to <strong>System Settings → Privacy & Security</strong> and click <strong>Open Anyway</strong>.</p></div>
+        <div class="step"><div class="num">3</div><p>Enter the <strong>pairing code</strong> shown in the Ledger app on your iPhone.</p></div>
+        <div class="step"><div class="num">4</div><p>Grant <strong>Full Disk Access</strong> when prompted — Ledger Relay needs this to read your iMessages.</p></div>
+    </div>
+
+    <div class="note">Requires macOS 13 Ventura or later. Runs silently in your menu bar and launches at login. Your Mac needs to be on for syncing.</div>
+    <p class="foot">Ledger</p>
+</div>
+</body>
+</html>
