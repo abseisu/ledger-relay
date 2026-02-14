@@ -3,86 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ledger Relay — Download</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <title>Sweep Relay — Mac Companion</title>
+    <meta name="description" content="Download Sweep Relay, the Mac companion app for Sweep. Sync your iMessages to your Sweep inbox.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23131B27'/><path d='M 31 70 C 19 39 39 19 62 27 C 56 35 43 37 39 55' stroke='%23CC8044' stroke-width='7' fill='none' stroke-linecap='round'/></svg>">
     <style>
+        :root {
+            --navy: #111820;
+            --navy-light: #19222E;
+            --copper: #CC8044;
+            --copper-glow: rgba(204, 128, 68, 0.08);
+            --cream: #E8E2D6;
+            --cream-dim: #8A96A6;
+            --cream-faint: #5A6878;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Cormorant Garamond', Georgia, serif;
-            background: #FAF8F5;
-            color: #2C2C2C;
+            font-family: 'Fraunces', Georgia, serif;
+            background: var(--navy);
+            color: var(--cream);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 40px 24px;
+            padding: 48px 24px;
+            overflow-x: hidden;
         }
-        .container { max-width: 500px; width: 100%; text-align: center; }
+
+        /* Subtle grain */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .page {
+            position: relative;
+            z-index: 1;
+            max-width: 440px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ── Icon ── */
         .icon {
-            width: 72px; height: 72px; border-radius: 16px;
-            background: linear-gradient(135deg, #34C759, #2EA84E);
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 28px;
-            box-shadow: 0 6px 20px rgba(52,199,89,0.25);
+            width: 88px;
+            height: 88px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow:
+                0 12px 40px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(204, 128, 68, 0.06);
+            margin-bottom: 32px;
+            opacity: 0;
+            transform: translateY(12px);
+            animation: rise 0.8s ease-out 0.1s forwards;
         }
-        .icon svg { width: 36px; height: 36px; fill: white; }
-        h1 { font-size: 32px; font-weight: 500; margin-bottom: 6px; }
-        .sub { font-size: 17px; font-style: italic; color: #999; margin-bottom: 32px; }
-        .desc { font-size: 16px; line-height: 1.7; color: #666; margin-bottom: 32px; text-align: left; }
-        .btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: #2C2C2C; color: #FAF8F5;
-            font-family: inherit; font-size: 17px; font-weight: 500;
-            padding: 14px 36px; border-radius: 10px; border: none;
-            cursor: pointer; text-decoration: none;
-            transition: background 0.2s;
+        .icon svg { display: block; width: 100%; height: 100%; }
+
+        /* ── Typography ── */
+        h1 {
+            font-size: 36px;
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            margin-bottom: 6px;
+            opacity: 0;
+            transform: translateY(12px);
+            animation: rise 0.8s ease-out 0.25s forwards;
         }
-        .btn:hover { background: #1a1a1a; }
-        .btn svg { width: 18px; height: 18px; fill: #FAF8F5; }
-        .steps { text-align: left; margin-top: 40px; padding-top: 32px; border-top: 1px solid #E5E0DA; }
-        .steps h2 { font-size: 19px; font-weight: 500; margin-bottom: 16px; }
-        .step { display: flex; gap: 14px; margin-bottom: 16px; }
-        .num {
-            width: 26px; height: 26px; border-radius: 50%;
-            background: rgba(44,44,44,0.08); display: flex;
-            align-items: center; justify-content: center;
-            font-size: 13px; font-weight: 600; flex-shrink: 0;
+        h1 em {
+            font-style: italic;
+            font-weight: 400;
+            color: var(--copper);
         }
-        .step p { font-size: 15px; line-height: 1.6; color: #555; }
-        .step strong { color: #2C2C2C; }
-        .note {
-            margin-top: 32px; padding: 16px 20px; background: #F0EDE8;
-            border-radius: 10px; font-size: 13px; font-style: italic;
-            color: #999; line-height: 1.6; text-align: left;
+
+        .tagline {
+            font-size: 16px;
+            font-style: italic;
+            font-weight: 300;
+            color: var(--cream-dim);
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(12px);
+            animation: rise 0.8s ease-out 0.35s forwards;
         }
-        .foot { margin-top: 36px; font-size: 12px; color: #ccc; font-style: italic; }
+
+        /* ── Download button ── */
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--copper);
+            color: #fff;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 15px 40px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 20px rgba(204, 128, 68, 0.25);
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(12px);
+            animation: rise 0.8s ease-out 0.5s forwards;
+        }
+        .download-btn:hover {
+            background: #D99050;
+            box-shadow: 0 6px 28px rgba(204, 128, 68, 0.35);
+            transform: translateY(-1px);
+        }
+        .download-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .req {
+            font-size: 12px;
+            color: var(--cream-faint);
+            font-style: italic;
+            margin-bottom: 48px;
+            opacity: 0;
+            animation: rise 0.8s ease-out 0.6s forwards;
+        }
+
+        /* ── Divider ── */
+        .rule {
+            width: 40px;
+            height: 1px;
+            background: var(--copper);
+            opacity: 0.3;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: rise 0.8s ease-out 0.65s forwards;
+        }
+
+        /* ── Steps ── */
+        .steps {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 48px;
+            opacity: 0;
+            transform: translateY(12px);
+            animation: rise 0.8s ease-out 0.7s forwards;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .step-num {
+            flex-shrink: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--copper-glow);
+            border: 1px solid rgba(204, 128, 68, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--copper);
+            margin-top: 1px;
+        }
+
+        .step-text {
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.55;
+            color: var(--cream-dim);
+        }
+        .step-text strong {
+            font-weight: 500;
+            color: var(--cream);
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            opacity: 0;
+            animation: rise 0.8s ease-out 0.85s forwards;
+        }
+        .footer p {
+            font-size: 13px;
+            font-style: italic;
+            font-weight: 300;
+            color: var(--cream-faint);
+            line-height: 1.6;
+        }
+
+        /* ── Animation ── */
+        @keyframes rise {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 { font-size: 30px; }
+            .download-btn { padding: 14px 32px; font-size: 15px; }
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="icon">
-        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H5.2L4 17.2V4h16v12z"/></svg>
-    </div>
-    <h1>Ledger Relay</h1>
-    <p class="sub">iMessage companion for Ledger</p>
-    <p class="desc">A tiny menu bar app that connects your iMessages to Ledger on your iPhone. It reads incoming messages, scores them, and lets you reply — all from the Ledger app.</p>
 
-    <a href="https://github.com/abseisu/ledger-relay/releases/latest/download/LedgerRelay.zip" class="btn">
-        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+<div class="page">
+
+    <div class="icon">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#F4F0E8"/>
+                    <stop offset="50%" stop-color="#E8A060"/>
+                    <stop offset="100%" stop-color="#CC8044"/>
+                </linearGradient>
+            </defs>
+            <rect width="512" height="512" fill="#131B27"/>
+            <path d="M 160 360 C 100 200 200 100 320 140 C 290 180 220 190 200 280"
+                  stroke="url(#g)" stroke-width="36" fill="none" stroke-linecap="round"/>
+        </svg>
+    </div>
+
+    <h1><em>Sweep</em> Relay</h1>
+    <p class="tagline">Mac companion for Sweep</p>
+
+    <a href="https://github.com/abseisu/ledger-relay/releases/latest/download/LedgerRelay.zip"
+       class="download-btn">
+        <svg viewBox="0 0 24 24"><path d="M12 16l-6-6h4V4h4v6h4l-6 6zm-8 4h16v-2H4v2z"/></svg>
         Download for Mac
     </a>
+    <p class="req">Requires macOS 13 Ventura or later</p>
+
+    <div class="rule"></div>
 
     <div class="steps">
-        <h2>Setup</h2>
-        <div class="step"><div class="num">1</div><p>Unzip and drag <strong>Ledger Relay</strong> to your Applications folder.</p></div>
-        <div class="step"><div class="num">2</div><p>Open it. If macOS blocks it, go to <strong>System Settings → Privacy & Security</strong> and click <strong>Open Anyway</strong>.</p></div>
-        <div class="step"><div class="num">3</div><p>Enter the <strong>pairing code</strong> shown in the Ledger app on your iPhone.</p></div>
-        <div class="step"><div class="num">4</div><p>Grant <strong>Full Disk Access</strong> when prompted — Ledger Relay needs this to read your iMessages.</p></div>
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-text">Unzip and open <strong>Sweep Relay</strong>. If macOS blocks it, go to <strong>System Settings → Privacy & Security</strong> and click <strong>Open Anyway</strong>.</div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-text">Grant <strong>Full Disk Access</strong> when prompted — this lets Relay read your iMessages.</div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-text">Enter the <strong>pairing code</strong> shown in the Sweep app on your iPhone.</div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-text">That's it. Relay runs silently in your menu bar. Keep your Mac on for continuous syncing.</div>
+        </div>
     </div>
 
-    <div class="note">Requires macOS 13 Ventura or later. Runs silently in your menu bar and launches at login. Your Mac needs to be on for syncing.</div>
-    <p class="foot">Ledger</p>
+    <div class="footer">
+        <p>Sweep Relay reads your iMessages locally, scores them with AI,<br>and sends only what matters to your phone. Nothing is stored permanently.</p>
+    </div>
+
 </div>
+
 </body>
 </html>
